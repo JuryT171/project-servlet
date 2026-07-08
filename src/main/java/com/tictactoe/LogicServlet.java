@@ -40,16 +40,8 @@ public class LogicServlet extends HttpServlet {
             return;
         }
 
-        // Получаем пустую ячейку поля
+        // Получаем пустую ячейку поля для хода компьютера
         int emptyFieldIndex = field.getEmptyFieldIndex();
-
-        if (emptyFieldIndex >= 0) {
-            field.getField().put(emptyFieldIndex, Sign.NOUGHT);
-            // Проверяем, не победил ли нолик после добавление последнего нолика
-            if (checkWin(resp, currentSession, field)) {
-                return;
-            }
-        }
 
         if (emptyFieldIndex >= 0) {
             field.getField().put(emptyFieldIndex, Sign.NOUGHT);
@@ -85,17 +77,17 @@ public class LogicServlet extends HttpServlet {
 
         resp.sendRedirect("/index.jsp");
     }
-
+    // проверка цифры
     private int getSelectedIndex (HttpServletRequest request) {
         String click = request.getParameter("click");
         boolean isNumeric = click.chars().allMatch(Character :: isDigit);
         return isNumeric ? Integer.parseInt(click) : 0;
     }
-
+    // проверка
     private Field extractField(HttpSession currentSession) {
         Object fieldAttribute = currentSession.getAttribute("field");
-        if (Field.class != fieldAttribute.getClass()) {
-            currentSession.invalidate();
+        if (Field.class != fieldAttribute.getClass()) { //проверка принадлежности классу
+            currentSession.invalidate(); // прерываем сессию если что то не то
             throw new RuntimeException("Session is broken, try one more time");
         }
         return (Field) fieldAttribute;

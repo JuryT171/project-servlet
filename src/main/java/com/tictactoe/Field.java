@@ -25,18 +25,19 @@ public class Field {
         return field;
     }
 
+    // ищет свободную ячейку для компьютера
     public int getEmptyFieldIndex() {
         return field.entrySet().stream()
-                .filter(e -> e.getValue() == Sign.EMPTY)
-                .map(Map.Entry::getKey)
-                .findFirst().orElse(-1);
+                .filter(e -> e.getValue() == Sign.EMPTY) // фильтруем до пустых
+                .map(Map.Entry::getKey) // из мапы выделяем ключи
+                .findFirst().orElse(-1); // берем первый самый маленький либо -1
     }
-
+    // возвращает таблицу для отрисовки
     public List<Sign> getFieldData() {
         return field.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(Map.Entry::getValue)
-                .collect(Collectors.toList());
+                .sorted(Map.Entry.comparingByKey()) // сортируем по ключу
+                .map(Map.Entry::getValue) // вытаскиваем значение из мапы
+                .collect(Collectors.toList()); // составляем список
     }
 
     public Sign checkWin() {
@@ -50,8 +51,8 @@ public class Field {
                 List.of(0, 4, 8),
                 List.of(2, 4, 6)
         );
-
-        for (List<Integer> winPossibility : winPossibilities) {
+        // список выйгрышных комбинаций
+        for (List<Integer> winPossibility : winPossibilities) { // цикл комбинаций
             if (field.get(winPossibility.get(0)) == field.get(winPossibility.get(1))
                 && field.get(winPossibility.get(0)) == field.get(winPossibility.get(2))) {
                 return field.get(winPossibility.get(0));
